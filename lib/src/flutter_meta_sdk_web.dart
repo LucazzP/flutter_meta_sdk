@@ -45,15 +45,14 @@ class FlutterMetaSdkWeb extends FlutterMetaSdkPlatform {
   /// Helper method to call fbq function safely
   void _callFbq(String action, String event, [Map<String, dynamic>? parameters]) {
     if (!_isFbqAvailable) {
-      print('Warning: fbq is not available. Make sure Meta Pixel is loaded in your index.html');
       return;
     }
 
     try {
       // Merge stored user data with event parameters for advanced matching
       final mergedParams = <String, dynamic>{};
-      if (_storedUserData != null) {
-        mergedParams.addAll(_storedUserData!);
+      if (_storedUserData.isNotEmpty) {
+        mergedParams.addAll(_storedUserData);
       }
       if (parameters != null) {
         mergedParams.addAll(parameters);
@@ -81,14 +80,11 @@ class FlutterMetaSdkWeb extends FlutterMetaSdkPlatform {
   Future<void> clearUserData() async {
     // Web implementation - Meta Pixel doesn't have a direct clear user data method
     // You might want to clear any locally stored user data if you're maintaining any
-    if (_isFbqAvailable) {
-      // Optionally, you could call fbq with empty user data
-      print('Note: Meta Pixel web SDK doesn\'t have a clearUserData equivalent');
-    }
+    _storedUserData.clear();
   }
 
   // Store user data for advanced matching in subsequent events
-  Map<String, dynamic>? _storedUserData;
+  Map<String, dynamic> _storedUserData = {};
 
   @override
   Future<void> setUserData({
@@ -121,7 +117,7 @@ class FlutterMetaSdkWeb extends FlutterMetaSdkPlatform {
     if (country != null) userData['country'] = country;
 
     // Store user data for use in subsequent events (advanced matching)
-    _storedUserData = userData.isNotEmpty ? userData : null;
+    _storedUserData = {..._storedUserData, ...userData};
 
     // Note: Meta Pixel web uses advanced matching by including user data in events
     // rather than setting it globally like mobile SDKs
@@ -130,13 +126,12 @@ class FlutterMetaSdkWeb extends FlutterMetaSdkPlatform {
   @override
   Future<void> clearUserID() async {
     // Meta Pixel web doesn't have a direct clearUserID method
-    print('Note: Meta Pixel web SDK doesn\'t have a clearUserID equivalent');
+    _storedUserData.remove('external_id');
   }
 
   @override
   Future<void> flush() async {
     // Meta Pixel web automatically sends events, no manual flush needed
-    print('Note: Meta Pixel web SDK doesn\'t require manual flushing');
   }
 
   @override
@@ -230,14 +225,13 @@ class FlutterMetaSdkWeb extends FlutterMetaSdkPlatform {
   Future<void> setUserID(String id) async {
     // Meta Pixel doesn't have a direct setUserID method
     // But you can include user_id in event parameters or use advanced matching
-    print('Note: Consider using setUserData with email or phone for user identification');
+    setUserData(externalUserId: id);
   }
 
   @override
   Future<void> setAutoLogAppEventsEnabled(bool enabled) async {
     // Meta Pixel web SDK doesn't have auto-logging control in the same way
     // Auto-logging is typically configured when initializing the pixel
-    print('Note: Auto-logging is configured during Meta Pixel initialization');
   }
 
   @override
@@ -286,6 +280,5 @@ class FlutterMetaSdkWeb extends FlutterMetaSdkPlatform {
   }) async {
     // Web tracking is typically controlled through cookie consent
     // and privacy settings rather than this method
-    print('Note: Web tracking is controlled through cookie consent and privacy settings');
   }
 }
