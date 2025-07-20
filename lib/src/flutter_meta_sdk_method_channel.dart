@@ -21,6 +21,7 @@ class MethodChannelFlutterMetaSdk extends FlutterMetaSdkPlatform {
 
   @override
   Future<void> setUserData({
+    String? externalUserId,
     String? email,
     String? firstName,
     String? lastName,
@@ -33,6 +34,7 @@ class MethodChannelFlutterMetaSdk extends FlutterMetaSdkPlatform {
     String? country,
   }) {
     final args = <String, dynamic>{
+      'externalUserId': externalUserId,
       'email': email,
       'firstName': firstName,
       'lastName': lastName,

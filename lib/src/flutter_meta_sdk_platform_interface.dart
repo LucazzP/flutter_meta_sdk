@@ -71,6 +71,7 @@ abstract class FlutterMetaSdkPlatform extends PlatformInterface {
   /// instance of an application. The user data will be persisted between
   /// application instances.
   Future<void> setUserData({
+    String? externalUserId,
     String? email,
     String? firstName,
     String? lastName,

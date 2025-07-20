@@ -92,6 +92,7 @@ class FlutterMetaSdkWeb extends FlutterMetaSdkPlatform {
 
   @override
   Future<void> setUserData({
+    String? externalUserId,
     String? email,
     String? firstName,
     String? lastName,
@@ -107,6 +108,7 @@ class FlutterMetaSdkWeb extends FlutterMetaSdkPlatform {
 
     // Build user data object for advanced matching, removing null values
     final userData = <String, dynamic>{};
+    if (externalUserId != null) userData['external_id'] = externalUserId;
     if (email != null) userData['em'] = email;
     if (firstName != null) userData['fn'] = firstName;
     if (lastName != null) userData['ln'] = lastName;

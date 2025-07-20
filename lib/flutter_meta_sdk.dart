@@ -51,6 +51,7 @@ class FlutterMetaSdk {
   /// instance of an application. The user data will be persisted between
   /// application instances.
   Future<void> setUserData({
+    String? externalUserId,
     String? email,
     String? firstName,
     String? lastName,
@@ -63,6 +64,7 @@ class FlutterMetaSdk {
     String? country,
   }) {
     return FlutterMetaSdkPlatform.instance.setUserData(
+      externalUserId: externalUserId,
       email: email,
       firstName: firstName,
       lastName: lastName,
