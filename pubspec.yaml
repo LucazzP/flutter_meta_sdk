@@ -12,12 +12,12 @@ dependencies:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  plugin_platform_interface: ^2.0.2
+  plugin_platform_interface: ^2.1.8
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.1
+  flutter_lints: ^2.0.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -43,7 +43,7 @@ flutter:
         pluginClass: FlutterMetaSdkPlugin
       web:
         pluginClass: FlutterMetaSdkWeb
-        fileName: flutter_meta_sdk_web.dart
+        fileName: src/flutter_meta_sdk_web.dart
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

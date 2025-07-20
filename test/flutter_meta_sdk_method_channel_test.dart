@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  const channel = MethodChannel(channelName);
+  const channel = MethodChannel('solusibejo.com/flutter_meta_sdk');
   final metaSdk = FlutterMetaSdk();
 
   MethodCall? methodCall;

@@ -1,9 +1,8 @@
 import 'dart:convert';
 
-import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-import 'flutter_meta_sdk.dart';
 import 'flutter_meta_sdk_method_channel.dart';
 
 abstract class FlutterMetaSdkPlatform extends PlatformInterface {
@@ -27,11 +26,8 @@ abstract class FlutterMetaSdkPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  static const _channel = MethodChannel(channelName);
-
   // See: https://github.com/facebook/facebook-android-sdk/blob/master/facebook-core/src/main/java/com/facebook/appevents/AppEventsConstants.java
-  static const eventNameCompletedRegistration =
-      'fb_mobile_complete_registration';
+  static const eventNameCompletedRegistration = 'fb_mobile_complete_registration';
   static const eventNameViewedContent = 'fb_mobile_content_view';
   static const eventNameRated = 'fb_mobile_rate';
   static const eventNameInitiatedCheckout = 'fb_mobile_initiated_checkout';
@@ -42,7 +38,6 @@ abstract class FlutterMetaSdkPlatform extends PlatformInterface {
   static const eventNameAdImpression = "AdImpression";
   static const eventNameAdClick = "AdClick";
 
-  static const _paramNameValueToSum = "_valueToSum";
   static const paramNameAdType = "fb_ad_type";
   static const paramNameCurrency = "fb_currency";
   static const paramNameOrderId = "fb_order_id";
@@ -66,14 +61,10 @@ abstract class FlutterMetaSdkPlatform extends PlatformInterface {
   /// This could be an EAN, article identifier, etc., depending on the nature of the app.
   static const paramNameContentId = "fb_content_id";
 
-  Future<void> activateApp() {
-    return _channel.invokeMethod<void>('activateApp');
-  }
+  Future<void> activateApp();
 
   /// Clears the current user data
-  Future<void> clearUserData() {
-    return _channel.invokeMethod<void>('clearUserData');
-  }
+  Future<void> clearUserData();
 
   /// Sets user data to associate with all app events.
   /// All user data are hashed and used to match Facebook user from this
@@ -90,85 +81,40 @@ abstract class FlutterMetaSdkPlatform extends PlatformInterface {
     String? state,
     String? zip,
     String? country,
-  }) {
-    final args = <String, dynamic>{
-      'email': email,
-      'firstName': firstName,
-      'lastName': lastName,
-      'phone': phone,
-      'dateOfBirth': dateOfBirth,
-      'gender': gender,
-      'city': city,
-      'state': state,
-      'zip': zip,
-      'country': country,
-    };
-
-    return _channel.invokeMethod<void>('setUserData', args);
-  }
+  });
 
   /// Clears the currently set user id.
-  Future<void> clearUserID() {
-    return _channel.invokeMethod<void>('clearUserID');
-  }
+  Future<void> clearUserID();
 
   /// Explicitly flush any stored events to the server.
-  Future<void> flush() {
-    return _channel.invokeMethod<void>('flush');
-  }
+  Future<void> flush();
 
   /// Returns the app ID this logger was configured to log to.
-  Future<String?> getApplicationId() {
-    return _channel.invokeMethod<String>('getApplicationId');
-  }
+  Future<String?> getApplicationId();
 
   /// Returns the current Facebook SDK version
-  Future<String?> getSdkVersion() {
-    return _channel.invokeMethod<String>('getSdkVersion');
-  }
+  Future<String?> getSdkVersion();
 
-  Future<String?> getAnonymousId() {
-    return _channel.invokeMethod<String>('getAnonymousId');
-  }
+  Future<String?> getAnonymousId();
 
   /// Log an app event with the specified [name] and the supplied [parameters] value.
   Future<void> logEvent({
     required String name,
     Map<String, dynamic>? parameters,
     double? valueToSum,
-  }) {
-    final args = <String, dynamic>{
-      'name': name,
-      _paramNameValueToSum: valueToSum,
-    };
-
-    if (parameters != null) {
-      args['parameters'] = _filterOutNulls(parameters);
-    }
-
-    return _channel.invokeMethod<void>('logEvent', _filterOutNulls(args));
-  }
+  });
 
   /// Logs an app event that tracks that the application was open via Push Notification.
   Future<void> logPushNotificationOpen({
     required Map<String, dynamic> payload,
     String? action,
-  }) {
-    final args = <String, dynamic>{
-      'payload': payload,
-      'action': action,
-    };
-
-    return _channel.invokeMethod<void>('logPushNotificationOpen', args);
-  }
+  });
 
   /// Sets a user [id] to associate with all app events.
   /// This can be used to associate your own user id with the
   /// app events logged from this instance of an application.
   /// The user ID will be persisted between application instances.
-  Future<void> setUserID(String id) {
-    return _channel.invokeMethod<void>('setUserID', id);
-  }
+  Future<void> setUserID(String id);
 
   /// Log this event when the user has completed registration with the app.
   /// Parameter [registrationMethod] is used to specify the method the user has
@@ -263,9 +209,7 @@ abstract class FlutterMetaSdkPlatform extends PlatformInterface {
   /// if disabled for GDPR-compliance.
   ///
   /// See: https://developers.facebook.com/docs/app-events/gdpr-compliance
-  Future<void> setAutoLogAppEventsEnabled(bool enabled) {
-    return _channel.invokeMethod<void>('setAutoLogAppEventsEnabled', enabled);
-  }
+  Future<void> setAutoLogAppEventsEnabled(bool enabled);
 
   /// Set Data Processing Options
   /// This is needed for California Consumer Privacy Act (CCPA) compliance
@@ -275,28 +219,13 @@ abstract class FlutterMetaSdkPlatform extends PlatformInterface {
     List<String> options, {
     int? country,
     int? state,
-  }) {
-    final args = <String, dynamic>{
-      'options': options,
-      'country': country,
-      'state': state,
-    };
-
-    return _channel.invokeMethod<void>('setDataProcessingOptions', args);
-  }
+  });
 
   Future<void> logPurchase({
     required double amount,
     required String currency,
     Map<String, dynamic>? parameters,
-  }) {
-    final args = <String, dynamic>{
-      'amount': amount,
-      'currency': currency,
-      'parameters': parameters,
-    };
-    return _channel.invokeMethod<void>('logPurchase', _filterOutNulls(args));
-  }
+  });
 
   Future<void> logInitiatedCheckout({
     double? totalPrice,
@@ -314,8 +243,7 @@ abstract class FlutterMetaSdkPlatform extends PlatformInterface {
         paramNameContentId: contentId,
         paramNameNumItems: numItems,
         paramNameCurrency: currency,
-        paramNamePaymentInfoAvailable:
-            paymentInfoAvailable ? paramValueYes : paramValueNo,
+        paramNamePaymentInfoAvailable: paymentInfoAvailable ? paramValueYes : paramValueNo,
       },
     );
   }
@@ -325,14 +253,7 @@ abstract class FlutterMetaSdkPlatform extends PlatformInterface {
   Future<void> setAdvertiserTracking({
     required bool enabled,
     bool collectId = true,
-  }) {
-    final args = <String, dynamic>{
-      'enabled': enabled,
-      'collectId': collectId,
-    };
-
-    return _channel.invokeMethod<void>('setAdvertiserTracking', args);
-  }
+  });
 
   /// The start of a paid subscription for a product or service you offer.
   /// See:
@@ -400,10 +321,11 @@ abstract class FlutterMetaSdkPlatform extends PlatformInterface {
   // ---------------------------------------------------------------------------
   //
   // PRIVATE METHODS BELOW HERE
-
+  
   /// Creates a new map containing all of the key/value pairs from [parameters]
   /// except those whose value is `null`.
-  Map<String, dynamic> _filterOutNulls(Map<String, dynamic> parameters) {
+  @nonVirtual
+  Map<String, dynamic> filterOutNulls(Map<String, dynamic> parameters) {
     final Map<String, dynamic> filtered = <String, dynamic>{};
     parameters.forEach((String key, dynamic value) {
       if (value != null) {

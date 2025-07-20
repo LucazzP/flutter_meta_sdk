@@ -17,6 +17,34 @@ First of all, if you don't have one already, you must first create an app at Fac
 
 * Don't forget to replace [APP_ID] with your Application ID
 
+# For Web
+
+For more information you can see full setup from [Facebook SDK Official](https://developers.facebook.com/docs/meta-pixel/get-started)
+
+Copy the following code and paste it in your `index.html` file, inside of your header.
+Please replace `[PIXEL_ID]` with your Pixel ID.
+You can also replace the `[LANGUAGE]` with your main language in ISO code. Like `en_US`.
+
+```html
+<!-- Meta Pixel Code -->
+<script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/[LANGUAGE]/fbevents.js');
+  fbq('init', '[PIXEL_ID]');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=[PIXEL_ID]&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+```
+
 # For IOS
 For more information you can see full setup from [Facebook SDK Official](https://developers.facebook.com/docs/ios/)
 Read through the "[Getting Started with App Events for iOS](https://developers.facebook.com/docs/app-events/getting-started-app-events-ios)" tutuorial and in particular, follow [step 5](https://developers.facebook.com/docs/app-events/getting-started-app-events-ios#step-5--configure-your-project) by opening `info.plist` "As Source Code" and add the following
